@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Volumen sin el %
+VOL=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null \
+  | grep -oE '[0-9]+%' | head -n1 | tr -d '%')
+
+# yes/no para evitar problemas con el idioma
+MUTE=$(LANG=C pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | awk '{print $2}')
+
+# Por si explota algo
+[ -z "$VOL" ] && VOL=0
+
+# Limitar a 100%
+[ "$VOL" -gt 100 ] && VOL=100
+
+if [ "$MUTE" = "yes" ]; then
+  echo "🔇 ${VOL}%"
+else
+  echo "  ${VOL}%"
+fi
