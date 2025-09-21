@@ -10,8 +10,11 @@ MUTE=$(LANG=C pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | awk '{print $2}')
 # Por si explota algo
 [ -z "$VOL" ] && VOL=0
 
-# Limitar a 100%
-[ "$VOL" -gt 100 ] && VOL=100
+# Si el volumen supera 100, fijarlo a 100
+if [ "$VOL" -gt 100 ]; then
+  pactl set-sink-volume @DEFAULT_SINK@ 100%
+  VOL=100
+fi
 
 if [ "$MUTE" = "yes" ]; then
   echo "🔇 ${VOL}%"
