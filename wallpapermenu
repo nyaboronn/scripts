@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# ¡¡ Idea de BreadOnPenguins !!
+# https://github.com/BreadOnPenguins/scripts/blob/master/wallpapermenu
+
+# En nsxiv marca la imagen pulsando 'm' y cierra con 'q'
+
+set -euo pipefail
+
+FOLDER="$HOME/backgrounds"
+MOD_KEY=Super
+
+hotkey(){ command -v xdotool >/dev/null && xdotool key --clearmodifiers "${MOD_KEY}+F5"; }
+apply(){ wal -i "$1" && hotkey; }
+
+if command -v nsxiv >/dev/null; then
+  choice=$(nsxiv -otb "$FOLDER"/* | head -n1)
+else
+  files=$(ls -1 "$FOLDER" | sort -V)
+  choice=$(printf 'Random\n%s\n' "$files" | dmenu -c -l 15 -i -p "Wallpaper: ")
+  [ -n "${choice:-}" ] && [ "$choice" != "Random" ] && choice="$FOLDER/$choice"
+fi
+
+case "${choice:-Random}" in
+  Random|"") apply "$FOLDER" ;;
+  *)         [ -f "$choice" ] && apply "$choice" ;;
+esac
