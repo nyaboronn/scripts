@@ -1,0 +1,30 @@
+for battery in /sys/class/power_supply/BAT?*; do
+
+    read -r status < "$battery/status"
+    read -r capacity < "$battery/capacity"
+
+    if [ "$status" = "Discharging" ]; then
+        if   [ "$capacity" -le 10 ]; then icon="󰁺 "
+        elif [ "$capacity" -le 20 ]; then icon="󰁻 "
+        elif [ "$capacity" -le 30 ]; then icon="󰁼 "
+        elif [ "$capacity" -le 40 ]; then icon="󰁽 "
+        elif [ "$capacity" -le 50 ]; then icon="󰁾 "
+        elif [ "$capacity" -le 60 ]; then icon="󰁿 "
+        elif [ "$capacity" -le 70 ]; then icon="󰂀 "
+        elif [ "$capacity" -le 80 ]; then icon="󰂁 "
+        elif [ "$capacity" -le 90 ]; then icon="󰂂 "
+        else                            icon="󰁹 "
+        fi
+    elif [ "$status" = "Charging" ]; then
+        icon=" "
+    elif [ "$status" = "Full" ]; then
+        icon="󱟢 "
+    elif [ "$status" = "Not charging" ]; then
+        icon=" "
+    else
+        icon="󰂑 "
+    fi
+
+    printf "%s%d%%" "$icon" "$capacity"
+done
+printf "\n"
