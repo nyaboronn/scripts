@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Idea de https://github.com/BreadOnPenguins/scripts !!
+
+# Crear lista "ap [name]"
+options=$(pactl -f json list sinks \
+  | jq -r '.[] | "\(.active_port // "(no-port)") [\(.name)]"')
+
+# Selección en dmenu
+#selection=$(echo "$options" | dmenu -i -l 5 -c -p "Output:")
+selection=$(echo "$options" | dmenu_config -i -l 5 -c -p "Output:")
+
+# Extraer el name entre corchetes
+sink_name=$(printf "%s" "$selection" | sed -n 's/.*\[\(.*\)\].*/\1/p')
+
+# Establecer el sink por defecto
+if [ -n "$sink_name" ]; then
+    pactl set-default-sink "$sink_name" && notify-send "Audio switched to: $selection"
+else
+    notify-send "Audio switch failed"
+fi

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Fuente fija
+font="JetBrainsMono Nerd Font:size=13"
+
+# Colores desde Xresources (prefijo dwm.*)
+nb=$(xrdb -query | awk -F'\t' '/^dwm\.normbgcolor:/   {print $2}')
+nf=$(xrdb -query | awk -F'\t' '/^dwm\.normfgcolor:/   {print $2}')
+sb=$(xrdb -query | awk -F'\t' '/^dwm\.selbgcolor:/    {print $2}')
+sf=$(xrdb -query | awk -F'\t' '/^dwm\.selfgcolor:/    {print $2}')
+
+# Ejecuta dmenu con la fuente + colores + argumentos extra
+exec dmenu \
+  -fn "$font" \
+  -nb "$nb" -nf "$nf" \
+  -sb "$sb" -sf "$sf" \
+  "$@"
