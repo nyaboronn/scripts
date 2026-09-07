@@ -4,7 +4,12 @@
 
 # Crear lista "ap [name]"
 options=$(pactl -f json list sinks \
-  | jq -r '.[] | "\(.active_port // "(no-port)") [\(.name)]"')
+  | jq -r '.[] | 
+    (if .active_port == "analog-output-lineout" then "🎧"
+     elif .active_port == "hdmi-output" then "📺"
+     elif .active_port then "🔌"
+     else "⚫" end) as $icon |
+    "\($icon) \(.active_port // "(no-port)") [\(.name)]"')
 
 # Selección en dmenu
 #selection=$(echo "$options" | dmenu -i -l 5 -c -p "Output:")
@@ -15,7 +20,7 @@ sink_name=$(printf "%s" "$selection" | sed -n 's/.*\[\(.*\)\].*/\1/p')
 
 # Establecer el sink por defecto
 if [ -n "$sink_name" ]; then
-    pactl set-default-sink "$sink_name" && notify-send "Audio switched to: $selection"
+    pactl set-default-sink "$sink_name" && notify-send "🎵 Audio switched to: $selection"
 else
-    notify-send "Audio switch failed"
+    notify-send "❌ Audio switch failed"
 fi

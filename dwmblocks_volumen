@@ -17,7 +17,15 @@ if [ "$VOL" -gt 100 ]; then
 fi
 
 if [ "$MUTE" = "yes" ]; then
-  echo "🔇 ${VOL}%"
+  echo "󰝟 ${VOL}%"
+elif [ "$VOL" -eq 0 ]; then
+  echo "󰝟 0%"
+elif [ "$VOL" -le 20 ]; then
+  echo "󰕿 ${VOL}%"
+elif [ "$VOL" -le 45 ]; then
+  echo "󰖀 ${VOL}%"
+elif [ "$VOL" -le 75 ]; then
+  echo "󰕾 ${VOL}%"
 else
-  echo "  ${VOL}%"
+  echo "󰓃 ${VOL}%"
 fi
