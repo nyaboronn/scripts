@@ -39,6 +39,12 @@ fi
 
 [ -z "$GPU_TEMP" ] && GPU_TEMP="N/A"
 
+
+# Try different fan sensors
+FAN_SPEED=$(sensors | awk '/^fan|^cpu_fan/ {print $2" "$3}')
+[ -z "$FAN_SPEED" ] && FAN_SPEED="N/A"
+
+
 # Memory and CPU usage
 MEM_USE=$(free -m | awk '/^Mem/ {printf "%.1f", ($3)/1024}')
 CPU_USE=$(iostat -c | awk '/avg-cpu:/{getline; print "User CPU: "$1"%\n\nSystem CPU: "$3"%"}')
@@ -61,7 +67,7 @@ esac
 
 
 # Send to bar
-echo "$GPU_ICON $GPU_TEMP°C $CPU_ICON $CPU_TEMP°C   ${MEM_USE}g"
+echo "$GPU_ICON $GPU_TEMP°C $CPU_ICON $CPU_TEMP°C  ${MEM_USE}g"
 
 
 # Clicking on bar
