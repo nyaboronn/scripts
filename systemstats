@@ -69,10 +69,11 @@ esac
 # Send to bar
 echo "$GPU_ICON $GPU_TEMP°C $CPU_ICON $CPU_TEMP°C  ${MEM_USE}g"
 
-
-# Clicking on bar
-case $BLOCK_BUTTON in
+# Clicking on bar (sin el dwmblocks asíncrono apenas funciona)
+: <<'END'
+case $BUTTON in
 		1) setsid -w -f "$TERMINAL" -e htop ;;
-		3) notify-send -t 10000 -h string:bgcolor:$COLOR Stats "$CPU_USE\n\nGPU: $GPU_TEMP°C\n\nFan Speed: $FAN_SPEED" ;;
+		3) notify-send -t 10000 Stats "$CPU_USE\n\nGPU: $GPU_TEMP°C\n\nFan Speed: $FAN_SPEED" ;;
 		6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
+END
