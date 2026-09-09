@@ -1,4 +1,9 @@
+#!/usr/bin/env bash
+
 for battery in /sys/class/power_supply/BAT?*; do
+
+    # Comprobar que existen y son legibles los archivos necesarios
+    [ -r "$battery/status" ] && [ -r "$battery/capacity" ] || continue
 
     read -r status < "$battery/status"
     read -r capacity < "$battery/capacity"
