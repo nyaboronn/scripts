@@ -16,16 +16,19 @@ if [ "$VOL" -gt 100 ]; then
   VOL=100
 fi
 
+# Formatear el número para que siempre ocupe 3 espacios (ej: "  5", " 45", "100")
+VOL_FORMATTED=$(printf "%3d" "$VOL")
+
 if [ "$MUTE" = "yes" ]; then
-  echo "󰝟 ${VOL}%"
+  echo "󰝟 ${VOL_FORMATTED}%"
 elif [ "$VOL" -eq 0 ]; then
-  echo "󰝟 0%"
+  echo "󰝟 ${VOL_FORMATTED}%"
 elif [ "$VOL" -le 20 ]; then
-  echo "󰕿 ${VOL}%"
+  echo "󰕿 ${VOL_FORMATTED}%"
 elif [ "$VOL" -le 45 ]; then
-  echo "󰖀 ${VOL}%"
+  echo "󰖀 ${VOL_FORMATTED}%"
 elif [ "$VOL" -le 75 ]; then
-  echo "󰕾 ${VOL}%"
+  echo "󰕾 ${VOL_FORMATTED}%"
 else
-  echo "󰓃 ${VOL}%"
+  echo "󰓃 ${VOL_FORMATTED}%"
 fi
